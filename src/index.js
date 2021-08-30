@@ -18,49 +18,21 @@ function expressionCalculator(expr) {
 		let a = expr.indexOf('(');
 		let b = expr.indexOf(')');
 		let intermed = expr.slice(a+1, b).trim().split(' ');
+		
+		let interRes = result (intermed)
 
-		let interRes = +intermed[0];
-		let interStack = 0;
-		
-		for(let i = 2; i < intermed.length; i+=2) {
-		
-		if(intermed[i-1] === '-') {
-			if(intermed[i+1] === '/' || intermed[i+1] === '*') {
-				interStack -= +intermed[i];
-				interStack = interStack.toString();
-				continue;
-			}
-			interRes -= +intermed[i];
-			
-		} else if(intermed[i-1] === '+') {
-			if(intermed[i+1] === '/' || intermed[i+1] === '*') {
-				interStack += +intermed[i];
-				interStack = interStack.toString();
-				continue;
-			}
-			interRes += +intermed[i];
-			
-		} else if(intermed[i-1] === '*') {
-			if(interStack !== 0) {
-				interStack *= +intermed[i];
-				continue;
-			}
-			interRes *= +intermed[i];
-			
-		} else if(intermed[i-1] === '/') {
-			if(interStack !== 0) {
-				interStack /= +intermed[i];
-				continue;
-			} 
-			interRes /= +intermed[i];
-		}
+		arr = (expr.slice(0, a) + interRes + expr.slice(b+1)).trim().split(' ');
 	}
-		
-	interRes = interRes + interStack;
 
-	arr = (expr.slice(0, a) + interRes + expr.slice(b+1)).trim().split(' ');
+	let res = result (arr)
+
+	return res;
+
 }
 
+function result (array) {
+
+	let arr = array;
 	let res = +arr[0];
 	let stack = 0;
 
@@ -68,6 +40,10 @@ function expressionCalculator(expr) {
 		
 		if(arr[i-1] === '-') {
 			if(arr[i+1] === '/' || arr[i+1] === '*') {
+				if(stack !== 0) {
+					res += stack;
+					stack = 0;
+				}
 				stack -= +arr[i];
 				stack = stack.toString();
 				continue;
@@ -76,6 +52,10 @@ function expressionCalculator(expr) {
 			
 		} else if(arr[i-1] === '+') {
 			if(arr[i+1] === '/' || arr[i+1] === '*') {
+				if(stack !== 0) {
+					res += stack;
+					stack = 0;
+				}
 				stack += +arr[i];
 				stack = stack.toString();
 				continue;
@@ -101,8 +81,8 @@ function expressionCalculator(expr) {
 	res = res + stack;
 	
 	return res;
-
 }
+
 
 module.exports = {
     expressionCalculator
